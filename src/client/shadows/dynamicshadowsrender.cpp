@@ -269,6 +269,14 @@ void ShadowRenderer::update(irr::video::ITexture *outputTarget)
 
 						material.BackfaceCulling = true;
 						material.FrontfaceCulling = false;
+
+						if (this->_enable_csm) {
+
+							if (nSplit == 3)
+								map_node->clean_mblock_shadows();
+						} else {
+							map_node->clean_mblock_shadows();
+						}
 						continue;
 					} // end clientMap render
 

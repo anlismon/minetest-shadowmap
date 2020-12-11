@@ -639,6 +639,15 @@ void ClientMap::PrintInfo(std::ostream &out)
 	out<<"ClientMap: ";
 }
 
+void ClientMap::clean_mblock_shadows()
+{
+	for (auto &i : m_drawlist_shadow) {
+		MapBlock *block = i.second;
+		block->refDrop();
+	}
+	m_drawlist_shadow.clear();
+}
+
 void ClientMap::renderMapShadows(video::IVideoDriver *driver,
 		irr::video::SMaterial &material, s32 pass, irr::core::vector3df position,
 		irr::core::vector3df direction, float max_distance, bool replace_material)
@@ -664,7 +673,7 @@ void ClientMap::renderMapShadows(video::IVideoDriver *driver,
 
 	MeshBufListList drawbufs;
 
-	for (auto &i : m_drawlist) {
+	for (auto &i : m_drawlist_shadow) {
 		v3s16 block_pos = i.first;
 		MapBlock *block = i.second;
 
@@ -783,8 +792,8 @@ void ClientMap::updateDrawListShadow(
 	std::vector<v2s16> blocks_in_range;
 	 
 
-
-	 
+	if (m_drawlist_shadow.empty())
+		m_drawlist_shadow=m_drawlist;
 	// Number of blocks currently loaded by the client
 	u32 blocks_loaded = 0;
 	// Number of blocks with mesh in rendering range
@@ -820,7 +829,8 @@ void ClientMap::updateDrawListShadow(
 			for (MapBlock *block : sectorblocks) {
 				// if the block is already in the draw_list, just continue
 				// with other.
-				if (m_drawlist.find(block->getPos()) != m_drawlist.end())
+				if (m_drawlist_shadow.find(block->getPos()) !=
+						m_drawlist_shadow.end())
 					continue;
 
 				/*
@@ -860,7 +870,7 @@ void ClientMap::updateDrawListShadow(
 
 				// Add to set
 				block->refGrab();
-				m_drawlist[block->getPos()] = block;
+				m_drawlist_shadow[block->getPos()] = block;
 
 				sector_blocks_drawn++;
 			} // foreach sectorblocks

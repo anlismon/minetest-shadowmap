@@ -141,6 +141,9 @@ public:
 	const MapDrawControl & getControl() const { return m_control; }
 	f32 getWantedRange() const { return m_control.wanted_range; }
 	f32 getCameraFov() const { return m_camera_fov; }
+
+	void clean_mblock_shadows();
+
 private:
 	Client *m_client;
 
@@ -155,6 +158,7 @@ private:
 	v3s16 m_camera_offset;
 
 	std::map<v3s16, MapBlock*> m_drawlist;
+	std::map<v3s16, MapBlock *> m_drawlist_shadow;
 
 	std::set<v2s16> m_last_drawn_sectors;
 
