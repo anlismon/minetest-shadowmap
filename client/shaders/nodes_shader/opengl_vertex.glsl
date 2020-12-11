@@ -8,6 +8,13 @@ uniform vec3 eyePosition;
 uniform vec3 cameraOffset;
 uniform float animationTimer;
 
+#ifdef ENABLE_DYNAMIC_SHADOWS
+// shadow matrix
+	uniform mat4 m_worldView;
+	varying vec3 P;
+	varying vec3 N;
+#endif
+
 varying vec3 vPosition;
 // World position in the visible world (i.e. relative to the cameraOffset.)
 // This can be used for many shader effects without loss of precision.
@@ -120,12 +127,14 @@ void main(void)
 	pos.x += disp_x;
 	pos.y += disp_z * 0.1;
 	pos.z += disp_z;
+	
 	gl_Position = mWorldViewProj * pos;
 #elif MATERIAL_TYPE == TILE_MATERIAL_WAVING_PLANTS && ENABLE_WAVING_PLANTS
 	vec4 pos = inVertexPosition;
 	if (varTexCoord.y < 0.05) {
 		pos.x += disp_x;
 		pos.z += disp_z;
+	
 	}
 	gl_Position = mWorldViewProj * pos;
 #else
@@ -156,4 +165,12 @@ void main(void)
 		0.07 * brightness);
 
 	varColor = clamp(color, 0.0, 1.0);
+
+	#ifdef ENABLE_DYNAMIC_SHADOWS
+
+		gl_TexCoord[3] = m_worldView*vec4(gl_Vertex.xyz,1.0);
+		P = vec3(gl_Vertex.xyz);
+		N =  vec3(gl_Normal.xyz);
+	#endif
+	 
 }
