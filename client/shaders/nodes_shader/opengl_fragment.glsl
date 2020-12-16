@@ -228,7 +228,7 @@ void main(void)
 
 		     posInShadow= 0.5+0.5*mShadowWorldViewProj1*vec4(posNormalbias.xyz,1.0);
 		if(posInShadow.x>=0.0&&posInShadow.x<=1.0&&posInShadow.y>=0.0&&posInShadow.y<=1.0)
-		shadow_int1=getShadow2(ShadowMapSampler, posInShadow.xy, posInShadow.z + bias*0.55,1);
+		shadow_int1=getShadow(ShadowMapSampler, posInShadow.xy, posInShadow.z + bias*0.55,1);
 		
 
 		     posInShadow= 0.5+0.5*mShadowWorldViewProj0*vec4(posNormalbias.xyz,1.0);

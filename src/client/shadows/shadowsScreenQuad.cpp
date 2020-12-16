@@ -35,5 +35,7 @@ void shadowScreenQuadCB::OnSetConstants(
 	services->setPixelShaderConstant("ShadowMapSampler1", &TextureId, 1);
 	TextureId = 2;
 	services->setPixelShaderConstant("ShadowMapSampler2", &TextureId, 1);
+	TextureId = 3;
+	services->setPixelShaderConstant("ShadowMapSamplerdynamic", &TextureId, 1);
 
 }

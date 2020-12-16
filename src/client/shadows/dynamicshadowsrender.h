@@ -18,6 +18,14 @@ enum E_SHADOW_MODE:u8
 };
 
 
+enum E_SHADOW_TEXTURE : u8
+{
+	SM_CLIENTMAP0 = 0,
+	SM_CLIENTMAP1,
+	SM_CLIENTMAP2
+};
+
+
 struct NodeToApply
 {
 	NodeToApply(irr::scene::ISceneNode *n,
@@ -78,6 +86,12 @@ public:
 			const std::string &shadowMapName,irr::video::ECOLOR_FORMAT
 					texture_format);
 
+	void renderShadowSplit(
+			irr::video::ITexture *target, DirectionalLight &light, int nSplit);
+	void renderShadowObjects(irr::video::ITexture *target, DirectionalLight &light);
+	void mixShadowsQuad();
+
+
 
 	//a bunch of variables
 	irr::IrrlichtDevice *_device{nullptr};
@@ -86,7 +100,8 @@ public:
 	Client *_client{nullptr};
 	irr::core::dimension2du _screenRTT_resolution;
 	irr::core::array<irr::video::ITexture *> renderTargets;
-	
+	irr::video::ITexture *shadowMapTextureFinal{nullptr};
+	irr::video::ITexture *shadowMapTextureDynamicObjects{nullptr};
 	bool _use_32bit_depth{false};
 	irr::video::SColor _clear_color{0x0};
 	

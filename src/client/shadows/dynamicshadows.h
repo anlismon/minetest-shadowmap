@@ -30,6 +30,7 @@ struct csmfrustum
 
 	float zNear{0.0f};
 	float zFar{0.0f};
+	float length{0.0f};
 	irr::core::matrix4 csmProjOrthMat;
 	irr::core::matrix4 csmViewMat;
 	irr::core::matrix4 cmsWorldViewProj;
@@ -81,7 +82,7 @@ public:
 	s32 getNumberSplits();
 	void getSplitDistances(float splitArray[4]);
 	bool should_update_shadow{true};
-
+	
 private:
 	
 	void createSplitMatrices(csmfrustum &subfrusta, const Camera *cam);
