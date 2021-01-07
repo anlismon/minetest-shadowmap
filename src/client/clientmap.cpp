@@ -791,6 +791,7 @@ void ClientMap::updateDrawListShadow(
 
 	std::vector<v2s16> blocks_in_range;
 	 
+	clean_mblock_shadows();
 
 	if (m_drawlist_shadow.empty())
 		m_drawlist_shadow=m_drawlist;

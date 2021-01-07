@@ -66,11 +66,11 @@ void DirectionalLight::createSplitMatrices(csmfrustum &subfrusta, const Camera *
 	// but the subfrusta position must be the actual world position
 	v3f eye = frustumCenter - eye_displacement;
 	subfrusta.position = world_center - eye_displacement;
-
+	subfrusta.length = 2.0f * vvolume;
 	subfrusta.csmViewMat.buildCameraLookAtMatrixLH(
 			eye, frustumCenter, v3f(0.0f, 1.0f, 0.0f).normalize());
 	subfrusta.csmProjOrthMat.buildProjectionMatrixOrthoLH(
-			vvolume, vvolume, -2.0f * vvolume, 2.0f * vvolume);
+			vvolume, vvolume, -subfrusta.length, subfrusta.length);
 }
 DirectionalLight::DirectionalLight(const irr::u32 shadowMapResolution,
 		const irr::core::vector3df &position, irr::video::SColorf lightColor,
@@ -127,7 +127,13 @@ void DirectionalLight::update_frustum(const Camera *cam, Client *client)
 
 	for (int i = 0; i < nsplits; i++) {
 		createSplitMatrices(csm_frustum[i], cam);
+		//yes, i know this is wrong, but it´s just an approximation to test the concept.
+		client->getEnv().getClientMap().updateDrawListShadow(
+				csm_frustum[i].position, getDirection(), csm_frustum[i].length);
+		
 	}
+	should_update_shadow = true;
+
 }
 
 void DirectionalLight::setPosition(const irr::core::vector3df &position)
